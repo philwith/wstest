@@ -1,0 +1,25 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head><title>Browser Client</title></head>
+<body>
+  <h2>Browser ↔ Bridge</h2>
+  <input id="msg" placeholder="Send message to bridge" />
+  <button onclick="send()">Send</button>
+  <pre id="log"></pre>
+
+  <script>
+    const socket = new WebSocket("ws://localhost:5000/ws/");
+    const log = document.getElementById("log");
+
+    socket.onopen = () => log.textContent += "Connected to bridge\n";
+    socket.onmessage = e => log.textContent += `Bridge: ${e.data}\n`;
+
+    function send() {
+      const msg = document.getElementById("msg").value;
+      socket.send(msg);
+      log.textContent += `You: ${msg}\n`;
+    }
+  </script>
+</body>
+</html>
